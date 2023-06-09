@@ -11,6 +11,8 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .service(crate::func::server_functions::hello)
+            .service(crate::func::server_functions::allrevs)
+            .service(crate::func::server_functions::allests)
             
             // .route(
             //     "/hey",
