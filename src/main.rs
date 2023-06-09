@@ -6,7 +6,7 @@ pub mod func;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let img_path = env::var("FIRE_THUMBNAILS").unwrap();
+    // let img_path = env::var("FIRE_THUMBNAILS").unwrap();
 
     HttpServer::new(move || {
         App::new()
