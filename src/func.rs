@@ -52,11 +52,19 @@ async fn allrevs() -> impl Responder {
 
     // let mut rev_vec = Vec::new();
     for r in revs {
-        info!(target: "atsrevserver", "allrevs: {:?}", r);
+        let r_result = r;
+        let res = match(r_result) {
+            Ok(r) => r,
+            Err(e) => {
+                error!(target: "atsrevserver", "allrevs: {:?}", e);
+                continue;
+            }
+        };
+        info!(target: "atsrevserver", "allrevs: {:?}", res);
         // let foo = format!("{:?}", r);
         // info!(target: "atsrevserver", "llrevs: {:?}", foo);
         // rev_vec.push(foo);
-    };
+    }
 
     // let arevs = serde_json::to_string(&rev_vec).expect("unable to serialize revs");
 
