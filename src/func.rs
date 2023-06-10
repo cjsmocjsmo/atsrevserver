@@ -72,17 +72,17 @@ async fn insert_review(info: web::Json<atstypes::RevInInfo>) -> impl Responder {
     let db = Database::open_file("/home/pipi/atsrevserver/ats.db").expect("Could not open db file");
     let revscoll = db.collection("reviews");
     info!(target: "atsrevserver", "insert_review boo: {:?}", revid);
-    let rev = atstypes::RevOutInfo {
+    revscoll.insert_one(atstypes::RevOutInfo {
         acctid: acctid.clone(),
         revid: revid.clone(),
         name: info.name.clone(),
         email: info.email.clone(),
         stars: info.stars.clone(),
         review: info.review.clone(),
-    };
+    }).expect("unable to insert revs");
     
 
-    revscoll.insert_one(rev).expect("unable to insert revs");
+
 
     HttpResponse::Ok().body("ReviewInserted")
 }
@@ -91,8 +91,8 @@ async fn insert_review(info: web::Json<atstypes::RevInInfo>) -> impl Responder {
 #[get("allrevs")]
 async fn allrevs() -> impl Responder {
     let db = Database::open_file("/home/pipi/atsrevserver/ats.db").expect("could not open db file");
-    let revscoll = db.collection::<atstypes::RevOutInfo>("reviews");
-    let revs = revscoll.find(None).expect("could not find reives");
+    let allrevscoll = db.collection::<atstypes::RevOutInfo>("reviews");
+    let revs = allrevscoll.find(None).expect("could not find reives");
 
     let mut rev_vec = Vec::new();
     for r in revs {
