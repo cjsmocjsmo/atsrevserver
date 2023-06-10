@@ -53,7 +53,7 @@ async fn allrevs() -> impl Responder {
         rev_vec.push(foo);
     };
 
-    let arevs = serde_json::to_string(&rev_vec).unwrap();
+    let arevs = serde_json::to_string(&rev_vec).expect("unable to serialize revs");
 
     HttpResponse::Ok().json(arevs)
 }
