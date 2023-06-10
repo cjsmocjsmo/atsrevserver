@@ -17,7 +17,7 @@ async fn insert_est(info: web::Json<atstypes::EstInInfo>) -> impl Responder {
     let acctid = server_functions::check_for_existing_account(info.email.clone());
     let db = Database::open_file("/home/pipi/atsrevserver/ats.db").expect("Could not open db file");
     let estscoll = db.collection("estimates");
-    estscoll.insert_one(atstypes::EstOutInfo {
+    let est = atstypes::EstOutInfo {
         acctid: acctid.clone(),
         name: info.name.clone(),
         addr: info.addr.clone(),
@@ -26,9 +26,13 @@ async fn insert_est(info: web::Json<atstypes::EstInInfo>) -> impl Responder {
         email: info.email.clone(),
         reqservdate: info.reqservdate.clone(),
         comment: info.comment.clone(),
-    }).expect("unable to insert revs");
+    };
 
-    HttpResponse::Ok().body("Hello insert_est")
+    info!(target: "atsrevserver", "insert_est est: {:?}", est);
+
+    estscoll.insert_one(est).expect("unable to insert revs");
+
+    HttpResponse::Ok().body("Insert estimate is complete")
 }
 
 #[get("/allests")]
