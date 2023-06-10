@@ -2,11 +2,13 @@
 use actix_web::{App, HttpServer};
 use actix_cors::Cors;
 // use std::env;
+use log::{error, info, debug};
 
 pub mod func;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    env_logger::init();
    
     HttpServer::new(move || {
         let cors = Cors::default()
