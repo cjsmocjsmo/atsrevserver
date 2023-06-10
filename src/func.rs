@@ -39,7 +39,7 @@ async fn insert_review(info: web::Json<atstypes::QInfo>) -> impl Responder {
 
 #[get("allrevs")]
 async fn allrevs() -> impl Responder {
-    let db = Database::open_file("/home/pipi/atsrevserver/ats.db").unwrap();
+    let db = Database::open_file("/home/pipi/atsrevserver/ats.db").expect("could not open db file");
     let revscoll = db.collection::<atstypes::IInfo>("reviews");
     let revs = revscoll.find(None).expect("could not find reives");
 
