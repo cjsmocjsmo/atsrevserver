@@ -32,7 +32,7 @@ async fn insert_review(info: web::Json<atstypes::QInfo>) -> impl Responder {
     };
     info!(target: "atsrevserver", "insert_review: boo: {:?}", boo);
 
-    revscoll.insert_one(boo).unwrap();
+    revscoll.insert_one(boo).expect("unable to insert revs");
 
     HttpResponse::Ok().body("ReviewInserted")
 }
