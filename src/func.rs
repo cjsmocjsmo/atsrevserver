@@ -30,9 +30,14 @@ async fn insert_review(info: web::Json<atstypes::QInfo>) -> impl Responder {
         stars: info.stars.clone(),
         review: info.review.clone(),
     };
-    info!(target: "atsrevserver", "insert_review: boo: {:?}", boo);
+    info!(target: "atsrevserver", "insert_review boo: {:?}", boo);
 
     revscoll.insert_one(boo).expect("unable to insert revs");
+
+    let person = revscoll.find(None).expect("could not find reives");
+    for p in person {
+        info!(target: "atsrevserver", "insert_review: {:?}", p);
+    }
 
     HttpResponse::Ok().body("ReviewInserted")
 }
@@ -45,15 +50,15 @@ async fn allrevs() -> impl Responder {
 
     
 
-    let mut rev_vec = Vec::new();
+    // let mut rev_vec = Vec::new();
     for r in revs {
         info!(target: "atsrevserver", "allrevs: {:?}", r);
-        let foo = format!("{:?}", r);
-        info!(target: "atsrevserver", "llrevs: {:?}", foo);
-        rev_vec.push(foo);
+        // let foo = format!("{:?}", r);
+        // info!(target: "atsrevserver", "llrevs: {:?}", foo);
+        // rev_vec.push(foo);
     };
 
-    let arevs = serde_json::to_string(&rev_vec).expect("unable to serialize revs");
+    // let arevs = serde_json::to_string(&rev_vec).expect("unable to serialize revs");
 
-    HttpResponse::Ok().json(arevs)
+    HttpResponse::Ok().body("Fuckit")
 }
