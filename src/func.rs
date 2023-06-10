@@ -53,14 +53,14 @@ async fn allrevs() -> impl Responder {
     // let mut rev_vec = Vec::new();
     for r in revs {
         let r_result = r;
-        let res = match(r_result) {
+        let res = match r_result {
             Ok(r) => r,
             Err(e) => {
-                error!(target: "atsrevserver", "allrevs: {:?}", e);
+                error!(target: "atsrevserver", "allrevs error: {:?}", e);
                 continue;
             }
         };
-        info!(target: "atsrevserver", "allrevs: {:?}", res);
+        info!(target: "atsrevserver", "allrevs res: {:?}", res);
         // let foo = format!("{:?}", r);
         // info!(target: "atsrevserver", "llrevs: {:?}", foo);
         // rev_vec.push(foo);
