@@ -17,7 +17,7 @@ async fn allests() -> impl Responder {
 }
 
 #[get("/insert_rev")]
-async fn insert_review(info: web::Query<atstypes::QInfo>) -> impl Responder {
+async fn insert_review(info: web::Json<atstypes::QInfo>) -> impl Responder {
     println!("{:?}", info);
     let acctid = server_functions::create_account(info.email.clone());
     let db = Database::open_file("/home/pipi/atsrevserver/ats.db").unwrap();
