@@ -2,7 +2,7 @@
 use actix_web::{App, HttpServer};
 use actix_cors::Cors;
 // use std::env;
-use log::{error, info, debug};
+// use log::{error, info, debug};
 
 pub mod func;
 

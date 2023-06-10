@@ -1,7 +1,8 @@
 use actix_web::{get, post, web, HttpResponse, Responder};
 // use serde::{Deserialize, Serialize};
-use polodb_core::{Database, bson::de};
-use log::{error, info, debug};
+// use polodb_core::{Database, bson::de};
+use polodb_core::Database;
+use log::{error, info};
 
 pub mod server_functions;
 pub mod atstypes;
@@ -18,9 +19,7 @@ async fn allests() -> impl Responder {
 
 #[post("/insert_rev")]
 async fn insert_review(info: web::Json<atstypes::QInfo>) -> impl Responder {
-    info!(target: "atsrevserver", "insert_review: {:?}", info);
     let acctid = server_functions::create_account(info.email.clone());
-    info!(target: "atsrevserver", "insert_review: acctid: {:?}", acctid);
     let db = Database::open_file("/home/pipi/atsrevserver/ats.db").expect("Could not open db file");
     let revscoll = db.collection("reviews");
     let boo = atstypes::IInfo {
@@ -34,11 +33,6 @@ async fn insert_review(info: web::Json<atstypes::QInfo>) -> impl Responder {
 
     revscoll.insert_one(boo).expect("unable to insert revs");
 
-    // let person = revscoll.find(None).expect("could not find reives");
-    // for p in person {
-    //     info!(target: "atsrevserver", "insert_review: {:?}", p);
-    // }
-
     HttpResponse::Ok().body("ReviewInserted")
 }
 
@@ -47,8 +41,6 @@ async fn allrevs() -> impl Responder {
     let db = Database::open_file("/home/pipi/atsrevserver/ats.db").expect("could not open db file");
     let revscoll = db.collection::<atstypes::IInfo>("reviews");
     let revs = revscoll.find(None).expect("could not find reives");
-
-    
 
     let mut rev_vec = Vec::new();
     for r in revs {
@@ -62,9 +54,6 @@ async fn allrevs() -> impl Responder {
         };
         
         rev_vec.push(res);
-        // let foo = format!("{:?}", r);
-        // info!(target: "atsrevserver", "llrevs: {:?}", foo);
-        // rev_vec.push(foo);
     }
 
     let arevs = serde_json::to_string(&rev_vec).expect("unable to serialize revs");
