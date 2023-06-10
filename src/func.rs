@@ -38,7 +38,7 @@ async fn insert_est(info: web::Json<atstypes::EstInInfo>) -> impl Responder {
 #[get("/allests")]
 async fn allests() -> impl Responder {
     let db = Database::open_file("/home/pipi/atsrevserver/ats.db").expect("Could not open db file");
-    let estscoll = db.collection("estimates");
+    let estscoll = db.collection::<atstypes::EstOutInfo>("estimates");
     let ests = estscoll.find(None).expect("could not find ests");
 
     let mut est_vec = Vec::new();
