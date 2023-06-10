@@ -309,6 +309,7 @@ dependencies = [
  "actix-files",
  "actix-web",
  "chrono",
+ "log",
  "md5",
  "polodb_core",
  "serde",
