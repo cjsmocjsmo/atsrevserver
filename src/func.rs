@@ -43,10 +43,13 @@ async fn allrevs() -> impl Responder {
     let revscoll = db.collection::<atstypes::IInfo>("reviews");
     let revs = revscoll.find(None).expect("could not find reives");
 
+    
+
     let mut rev_vec = Vec::new();
     for r in revs {
+        info!(target: "atsrevserver", "allrevs: {:?}", r);
         let foo = format!("{:?}", r);
-        info!(target: "atsrevserver", "allrevs: {:?}", foo);
+        info!(target: "atsrevserver", "llrevs: {:?}", foo);
         rev_vec.push(foo);
     };
 
