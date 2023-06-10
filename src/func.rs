@@ -71,6 +71,7 @@ async fn insert_review(info: web::Json<atstypes::RevInInfo>) -> impl Responder {
     let revid = server_functions::gen_id(info.review.clone());
     let db = Database::open_file("/home/pipi/atsrevserver/ats.db").expect("Could not open db file");
     let revscoll = db.collection("reviews");
+    info!(target: "atsrevserver", "insert_review boo: {:?}", revid);
     let rev = atstypes::RevOutInfo {
         acctid: acctid.clone(),
         revid: revid.clone(),
@@ -79,7 +80,7 @@ async fn insert_review(info: web::Json<atstypes::RevInInfo>) -> impl Responder {
         stars: info.stars.clone(),
         review: info.review.clone(),
     };
-    info!(target: "atsrevserver", "insert_review boo: {:?}", revid);
+    
 
     revscoll.insert_one(rev).expect("unable to insert revs");
 
