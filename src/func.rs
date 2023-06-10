@@ -1,7 +1,7 @@
 use actix_web::{get, post, web, HttpResponse, Responder};
 // use serde::{Deserialize, Serialize};
 use polodb_core::{Database, bson::de};
-use log::{info, debug};
+use log::{error, info, debug};
 
 pub mod server_functions;
 pub mod atstypes;
@@ -18,10 +18,10 @@ async fn allests() -> impl Responder {
 
 #[post("/insert_rev")]
 async fn insert_review(info: web::Json<atstypes::QInfo>) -> impl Responder {
-    info!(target: "atsrevserver", "insert_review: {:?}", info);
+    error!(target: "atsrevserver", "insert_review: {:?}", info);
     let acctid = server_functions::create_account(info.email.clone());
-    debug!(target: "atsrevserver", "insert_review: acctid: {:?}", acctid);
-    let db = Database::open_file("/home/pipi/atsrevserver/ats.db").unwrap();
+    error!(target: "atsrevserver", "insert_review: acctid: {:?}", acctid);
+    let db = Database::open_file("/home/pipi/atsrevserver/ats.db").expect("Could not open db file");
     let revscoll = db.collection("reviews");
     revscoll
         .insert_one(atstypes::IInfo {
