@@ -15,6 +15,7 @@ async fn allests() -> impl Responder {
     HttpResponse::Ok().body("Hello allests")
 }
 
+#[derive(Debug)]
 #[derive(Serialize, Deserialize)]
 struct QInfo {
     name: String,
@@ -23,6 +24,7 @@ struct QInfo {
     review: String,
 }
 
+#[derive(Debug)]
 #[derive(Serialize, Deserialize)]
 struct IInfo {
     acctid: String,
@@ -34,6 +36,7 @@ struct IInfo {
 
 #[get("/insert_rev")]
 async fn insert_review(info: web::Query<QInfo>) -> impl Responder {
+    println!("{:?}", info);
     let acctid = server_functions::create_account(info.email.clone());
     let db = Database::open_file("ats.db").unwrap();
     let revscoll = db.collection("reviews");

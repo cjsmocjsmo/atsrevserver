@@ -10,6 +10,7 @@ fn gen_acct_id(astring: String) -> String {
     hstring
 }
 
+#[derive(Debug)]
 #[derive(Serialize, Deserialize)]
 struct Account {
     acct: String,
