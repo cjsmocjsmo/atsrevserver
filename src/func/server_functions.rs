@@ -6,7 +6,7 @@ use polodb_core::bson::doc;
 // use serde::{Deserialize, Serialize};
 use crate::func::atstypes;
 
-fn gen_acct_id(astring: String) -> String {
+pub fn gen_id(astring: String) -> String {
     let result = md5::compute(astring);
     let hstring = format!("{:x}", result);
 
@@ -15,7 +15,7 @@ fn gen_acct_id(astring: String) -> String {
 
 pub fn create_account(qemail: String) -> String {
     let acct = qemail.clone();
-    let acctid = gen_acct_id(qemail.clone());
+    let acctid = gen_id(qemail.clone());
     let now = Local::now();
     let creation_date = now.format("%Y-%m-%d %H:%M:%S").to_string();
     let db = Database::open_file("/home/pipi/atsrevserver/ats.db").unwrap();

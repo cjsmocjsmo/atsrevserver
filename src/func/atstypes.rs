@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct EstInInfo {
+    pub estid: String,
     pub name: String,
     pub addr: String,
     pub city: String,
@@ -15,6 +16,7 @@ pub struct EstInInfo {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct EstOutInfo {
     pub acctid: String,
+    pub estid: String,
     pub name: String,
     pub addr: String,
     pub city: String,
@@ -27,6 +29,7 @@ pub struct EstOutInfo {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct RevInInfo {
+    pub revid: String,
     pub name: String,
     pub email: String,
     pub stars: String,
@@ -36,6 +39,7 @@ pub struct RevInInfo {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct RevOutInfo {
     pub acctid: String,
+    pub revid: String,
     pub name: String,
     pub email: String,
     pub stars: String,
