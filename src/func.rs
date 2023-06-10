@@ -34,10 +34,10 @@ async fn insert_review(info: web::Json<atstypes::QInfo>) -> impl Responder {
 
     revscoll.insert_one(boo).expect("unable to insert revs");
 
-    let person = revscoll.find(None).expect("could not find reives");
-    for p in person {
-        info!(target: "atsrevserver", "insert_review: {:?}", p);
-    }
+    // let person = revscoll.find(None).expect("could not find reives");
+    // for p in person {
+    //     info!(target: "atsrevserver", "insert_review: {:?}", p);
+    // }
 
     HttpResponse::Ok().body("ReviewInserted")
 }
