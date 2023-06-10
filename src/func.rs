@@ -20,7 +20,7 @@ async fn allests() -> impl Responder {
 async fn insert_review(info: web::Query<atstypes::QInfo>) -> impl Responder {
     println!("{:?}", info);
     let acctid = server_functions::create_account(info.email.clone());
-    let db = Database::open_file("ats.db").unwrap();
+    let db = Database::open_file("/home/pipi/atsrevserver/ats.db").unwrap();
     let revscoll = db.collection("reviews");
     revscoll
         .insert_one(atstypes::IInfo {
@@ -37,7 +37,7 @@ async fn insert_review(info: web::Query<atstypes::QInfo>) -> impl Responder {
 
 #[get("allrevs")]
 async fn allrevs() -> impl Responder {
-    let db = Database::open_file("ats.db").unwrap();
+    let db = Database::open_file("/home/pipi/atsrevserver/ats.db").unwrap();
     let revscoll = db.collection::<atstypes::IInfo>("reviews");
     let revs = revscoll.find(None).unwrap();
 
