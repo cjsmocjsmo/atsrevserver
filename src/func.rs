@@ -12,34 +12,77 @@ async fn hello() -> impl Responder {
     HttpResponse::Ok().body("Hello world!")
 }
 
+#[post("/insert_est")]
+async fn insert_est(info: web::Json<atstypes::EstInInfo>) -> impl Responder {
+    let acctid = server_functions::check_for_existing_account(info.email.clone());
+    let db = Database::open_file("/home/pipi/atsrevserver/ats.db").expect("Could not open db file");
+    let estscoll = db.collection("estimates");
+    estscoll.insert_one(atstypes::EstOutInfo {
+        acctid: acctid.clone(),
+        name: info.name.clone(),
+        addr: info.addr.clone(),
+        city: info.city.clone(),
+        phone: info.phone.clone(),
+        email: info.email.clone(),
+        reqservdate: info.reqservdate.clone(),
+        comment: info.comment.clone(),
+    }).expect("unable to insert revs");
+
+    HttpResponse::Ok().body("Hello insert_est")
+}
+
 #[get("/allests")]
 async fn allests() -> impl Responder {
-    HttpResponse::Ok().body("Hello allests")
+    let db = Database::open_file("/home/pipi/atsrevserver/ats.db").expect("Could not open db file");
+    let estscoll = db.collection("estimates");
+    let ests = estscoll.find(None).expect("could not find ests");
+
+    let mut est_vec = Vec::new();
+    for e in ests {
+        let e_result = e;
+        let res = match e_result {
+            Ok(e) => e,
+            Err(e) => {
+                error!(target: "atsrevserver", "allests error: {:?}", e);
+                continue;
+            }
+        };
+        
+        est_vec.push(res);
+    }
+
+    let aests = serde_json::to_string(&est_vec).expect("unable to serialize ests");
+    info!(target: "atsrevserver", "allests aests: {:?}", aests);
+
+
+
+    HttpResponse::Ok().json(aests)
 }
 
 #[post("/insert_rev")]
-async fn insert_review(info: web::Json<atstypes::QInfo>) -> impl Responder {
-    let acctid = server_functions::create_account(info.email.clone());
+async fn insert_review(info: web::Json<atstypes::RevInInfo>) -> impl Responder {
+    let acctid = server_functions::check_for_existing_account(info.email.clone());
     let db = Database::open_file("/home/pipi/atsrevserver/ats.db").expect("Could not open db file");
     let revscoll = db.collection("reviews");
-    let boo = atstypes::IInfo {
+    let rev = atstypes::RevOutInfo {
         acctid: acctid.clone(),
         name: info.name.clone(),
         email: info.email.clone(),
         stars: info.stars.clone(),
         review: info.review.clone(),
     };
-    info!(target: "atsrevserver", "insert_review boo: {:?}", boo);
+    // info!(target: "atsrevserver", "insert_review boo: {:?}", boo);
 
-    revscoll.insert_one(boo).expect("unable to insert revs");
+    revscoll.insert_one(rev).expect("unable to insert revs");
 
     HttpResponse::Ok().body("ReviewInserted")
 }
 
+
 #[get("allrevs")]
 async fn allrevs() -> impl Responder {
     let db = Database::open_file("/home/pipi/atsrevserver/ats.db").expect("could not open db file");
-    let revscoll = db.collection::<atstypes::IInfo>("reviews");
+    let revscoll = db.collection::<atstypes::RevOutInfo>("reviews");
     let revs = revscoll.find(None).expect("could not find reives");
 
     let mut rev_vec = Vec::new();
@@ -57,6 +100,6 @@ async fn allrevs() -> impl Responder {
     }
 
     let arevs = serde_json::to_string(&rev_vec).expect("unable to serialize revs");
-    info!(target: "atsrevserver", "allrevs arevs: {:?}", arevs);
+    // info!(target: "atsrevserver", "allrevs arevs: {:?}", arevs);
     HttpResponse::Ok().json(arevs)
 }
