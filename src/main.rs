@@ -18,6 +18,7 @@ async fn main() -> std::io::Result<()> {
             .wrap(cors)
             .service(crate::func::hello)
             .service(crate::func::insert_review)
+            .service(crate::func::allrevs)
             .service(crate::func::allests)
             
             // .route(
