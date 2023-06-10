@@ -20,18 +20,19 @@ async fn allests() -> impl Responder {
 async fn insert_review(info: web::Json<atstypes::QInfo>) -> impl Responder {
     info!(target: "atsrevserver", "insert_review: {:?}", info);
     let acctid = server_functions::create_account(info.email.clone());
-    error!(target: "atsrevserver", "insert_review: acctid: {:?}", acctid);
+    info!(target: "atsrevserver", "insert_review: acctid: {:?}", acctid);
     let db = Database::open_file("/home/pipi/atsrevserver/ats.db").expect("Could not open db file");
     let revscoll = db.collection("reviews");
-    revscoll
-        .insert_one(atstypes::IInfo {
-            acctid: acctid.clone(),
-            name: info.name.clone(),
-            email: info.email.clone(),
-            stars: info.stars.clone(),
-            review: info.review.clone(),
-        })
-        .unwrap();
+    let boo = atstypes::IInfo {
+        acctid: acctid.clone(),
+        name: info.name.clone(),
+        email: info.email.clone(),
+        stars: info.stars.clone(),
+        review: info.review.clone(),
+    };
+    info!(target: "atsrevserver", "insert_review: boo: {:?}", boo);
+
+    revscoll.insert_one(boo).unwrap();
 
     HttpResponse::Ok().body("ReviewInserted")
 }
@@ -40,11 +41,12 @@ async fn insert_review(info: web::Json<atstypes::QInfo>) -> impl Responder {
 async fn allrevs() -> impl Responder {
     let db = Database::open_file("/home/pipi/atsrevserver/ats.db").unwrap();
     let revscoll = db.collection::<atstypes::IInfo>("reviews");
-    let revs = revscoll.find(None).unwrap();
+    let revs = revscoll.find(None).expect("could not find reives");
 
     let mut rev_vec = Vec::new();
     for r in revs {
         let foo = format!("{:?}", r);
+        info!(target: "atsrevserver", "allrevs: {:?}", foo);
         rev_vec.push(foo);
     };
 
