@@ -79,7 +79,7 @@ async fn insert_review(info: web::Json<atstypes::RevInInfo>) -> impl Responder {
         stars: info.stars.clone(),
         review: info.review.clone(),
     };
-    // info!(target: "atsrevserver", "insert_review boo: {:?}", boo);
+    info!(target: "atsrevserver", "insert_review boo: {:?}", revid);
 
     revscoll.insert_one(rev).expect("unable to insert revs");
 
