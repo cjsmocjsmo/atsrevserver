@@ -21,6 +21,7 @@ async fn main() -> std::io::Result<()> {
             .service(crate::func::hello)
             .service(crate::func::insert_review)
             .service(crate::func::allrevs)
+            .service(crate::func::insert_est)
             .service(crate::func::allests)
             
             // .route(
