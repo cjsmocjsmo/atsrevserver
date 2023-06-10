@@ -16,7 +16,7 @@ async fn allests() -> impl Responder {
     HttpResponse::Ok().body("Hello allests")
 }
 
-#[get("/insert_rev")]
+#[post("/insert_rev")]
 async fn insert_review(info: web::Json<atstypes::QInfo>) -> impl Responder {
     println!("{:?}", info);
     let acctid = server_functions::create_account(info.email.clone());
