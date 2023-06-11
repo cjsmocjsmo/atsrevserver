@@ -13,12 +13,12 @@ pub fn gen_id(astring: String) -> String {
     hstring
 }
 
-pub async fn create_account(qemail: String) -> String {
+pub async fn create_account(db: &Database, qemail: String) -> String {
     let acct = qemail.clone();
     let acctid = gen_id(qemail.clone());
     let now = Local::now();
     let creation_date = now.format("%Y-%m-%d %H:%M:%S").to_string();
-    let db = Database::open_file("/home/pipi/atsrevserver/ats.db").expect("unable to open db file for acccounts");
+    // let db = Database::open_file("/home/pipi/atsrevserver/ats.db").expect("unable to open db file for acccounts");
     let acctcoll = db.collection("accounts");
     acctcoll
         .insert_one(atstypes::Account {
@@ -32,8 +32,8 @@ pub async fn create_account(qemail: String) -> String {
 }
 
 
-pub async fn check_for_existing_account(qemail: String) -> String {
-    let db = Database::open_file("/home/pipi/atsrevserver/ats.db").expect("Could not open db file");
+pub async fn check_for_existing_account(db: &Database, qemail: String) -> String {
+    // let db = Database::open_file("/home/pipi/atsrevserver/ats.db").expect("Could not open db file");
     let acctcoll = db.collection::<atstypes::Account>("accounts");
     let accts = acctcoll.find(doc! {"acct": qemail.clone()}).expect("Unable to find account");
     
@@ -55,7 +55,7 @@ pub async fn check_for_existing_account(qemail: String) -> String {
         let accidlist = serde_json::to_string(&acct_vec).expect("unable to serialize revs");
         return accidlist
     } else {
-        let accidlist = create_account(qemail.clone()).await;
+        let accidlist = create_account(&db, qemail.clone()).await;
         // let accidlist = String::from("None");
         return accidlist
     }
