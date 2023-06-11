@@ -15,11 +15,12 @@ async fn hello() -> impl Responder {
 #[post("/insert_est")]
 async fn insert_est(info: web::Json<atstypes::EstInInfo>) -> impl Responder {
     let acctid = server_functions::check_for_existing_account(info.email.clone());
+    
     let estid = server_functions::gen_id(info.comment.clone());
     let db = Database::open_file("/home/pipi/atsrevserver/ats.db").expect("Could not open db file");
     let estscoll = db.collection("estimates");
     let est = atstypes::EstOutInfo {
-        acctid: acctid.clone(),
+        acctid: acctid.await,
         estid: estid.clone(),
         name: info.name.clone(),
         addr: info.addr.clone(),
@@ -68,13 +69,14 @@ async fn allests() -> impl Responder {
 #[post("/insert_rev")]
 async fn insert_review(info: web::Json<atstypes::RevInInfo>) -> impl Responder {
     let acctid = server_functions::check_for_existing_account(info.email.clone());
+    
     let rev_str = serde_json::to_string(&info.review.clone()).expect("unable to serialize revs");
     let revid = server_functions::gen_id(rev_str);
     let db = Database::open_file("/home/pipi/atsrevserver/ats.db").expect("Could not open db file");
     let revscoll = db.collection("reviews");
     info!(target: "atsrevserver", "insert_review boo: {:?}", revid);
     revscoll.insert_one(atstypes::RevOutInfo {
-        acctid: acctid.clone(),
+        acctid: acctid.await,
         revid: revid.clone(),
         name: info.name.clone(),
         email: info.email.clone(),

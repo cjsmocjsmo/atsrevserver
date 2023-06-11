@@ -13,7 +13,7 @@ pub fn gen_id(astring: String) -> String {
     hstring
 }
 
-pub fn create_account(qemail: String) -> String {
+pub async fn create_account(qemail: String) -> String {
     let acct = qemail.clone();
     let acctid = gen_id(qemail.clone());
     let now = Local::now();
@@ -32,7 +32,7 @@ pub fn create_account(qemail: String) -> String {
 }
 
 
-pub fn check_for_existing_account(qemail: String) -> String {
+pub async fn check_for_existing_account(qemail: String) -> String {
     let db = Database::open_file("/home/pipi/atsrevserver/ats.db").expect("Could not open db file");
     let acctcoll = db.collection::<atstypes::Account>("accounts");
     let accts = acctcoll.find(doc! {"acct": qemail.clone()}).expect("Unable to find account");
@@ -55,7 +55,8 @@ pub fn check_for_existing_account(qemail: String) -> String {
         let accidlist = serde_json::to_string(&acct_vec).expect("unable to serialize revs");
         return accidlist
     } else {
-        let accidlist = create_account(qemail.clone());
+        let accidlist = create_account(qemail.clone()).await;
+        // let accidlist = String::from("None");
         return accidlist
     }
     // let accidlist = erde_json::to_string(&act_vec).expect("unable to serialize revs");
