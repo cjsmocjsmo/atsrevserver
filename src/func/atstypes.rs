@@ -51,3 +51,8 @@ pub struct Account {
     pub acctid: String,
     pub creation_date: String,
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct EstData {
+    pub estid: String,
+}

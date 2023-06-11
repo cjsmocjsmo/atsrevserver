@@ -64,7 +64,7 @@ async fn allests() -> impl Responder {
 }
 
 #[get("/completed")]
-async fn completed(data: web::Query<atstypes::EstOutInfo>) -> impl Responder {
+async fn completed(data: web::Query<atstypes::EstData>) -> impl Responder {
     let estid = data.estid.clone();
     let db = Database::open_file("/home/pipi/atsrevserver/ats.db").expect("Could not open db file");
     let estscoll: Collection<atstypes::EstOutInfo> = db.collection("estimates");
