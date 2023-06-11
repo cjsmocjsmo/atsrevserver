@@ -28,7 +28,6 @@ pub struct EstOutInfo {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct RevInInfo {
-    pub revid: String,
     pub name: String,
     pub email: String,
     pub stars: String,
