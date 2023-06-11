@@ -23,6 +23,7 @@ pub struct EstOutInfo {
     pub email: String,
     pub reqservdate: String,
     pub comment: String,
+    pub completed: String,
 }
 
 
