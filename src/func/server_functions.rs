@@ -18,7 +18,7 @@ pub fn create_account(qemail: String) -> String {
     let acctid = gen_id(qemail.clone());
     let now = Local::now();
     let creation_date = now.format("%Y-%m-%d %H:%M:%S").to_string();
-    let db = Database::open_file("/home/pipi/atsrevserver/ats.db").unwrap();
+    let db = Database::open_file("/home/pipi/atsrevserver/ats.db").expect("unable to open db file for acccounts");
     let acctcoll = db.collection("accounts");
     acctcoll
         .insert_one(atstypes::Account {
