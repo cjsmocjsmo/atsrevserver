@@ -73,7 +73,7 @@ async fn completed(data: web::Query<atstypes::EstData>) -> impl Responder {
     estscoll
         .update_many(
             doc! {"estid": estid},
-            doc! {"$set": {"completed": completion_date}},
+            doc! {"$set": doc! {"completed": completion_date}},
         )
         .expect("unable to update ests");
 
