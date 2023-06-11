@@ -71,7 +71,7 @@ async fn completed(data: web::Query<atstypes::EstData>) -> impl Responder {
     let now = Local::now();
     let completion_date = now.format("%Y-%m-%d %H:%M:%S").to_string();
     estscoll
-        .update_one(
+        .update_many(
             doc! {"estid": estid},
             doc! {"$set": {"completed": completion_date}},
         )
