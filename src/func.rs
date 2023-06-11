@@ -68,7 +68,8 @@ async fn allests() -> impl Responder {
 #[post("/insert_rev")]
 async fn insert_review(info: web::Json<atstypes::RevInInfo>) -> impl Responder {
     let acctid = server_functions::check_for_existing_account(info.email.clone());
-    let revid = server_functions::gen_id(info.review.clone());
+    let rev_str = serde_json::to_string(&info.review.clone()).expect("unable to serialize revs");
+    let revid = server_functions::gen_id(rev_str);
     let db = Database::open_file("/home/pipi/atsrevserver/ats.db").expect("Could not open db file");
     let revscoll = db.collection("reviews");
     info!(target: "atsrevserver", "insert_review boo: {:?}", revid);
