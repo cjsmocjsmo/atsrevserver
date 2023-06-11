@@ -3,7 +3,6 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct EstInInfo {
-    pub estid: String,
     pub name: String,
     pub addr: String,
     pub city: String,
